@@ -1,0 +1,24 @@
+{
+  "name": "electron-py-demo",
+  "version": "0.0.1",
+  "description": "electron",
+  "keywords": [
+    "electron",
+    "react",
+    "antd",
+    "python"
+  ],
+  "scripts": {
+    "install": "npm-run-all --serial install:*",
+    "install:main": "cd main && npm i",
+    "install:renderer": "cd renderer && npm i",
+    "start": "npm-run-all --parallel start:*",
+    "start:renderer": "cd renderer && npm run dev",
+    "start:main": "cd main && npm run electron",
+    "build": "cd renderer && npm run build && cd ../main && npm run electron:build"
+
+  },
+  "devDependencies": {
+    "npm-run-all": "^4.1.5"
+  }
+}

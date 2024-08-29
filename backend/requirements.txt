@@ -1,0 +1,3 @@
+pyinstaller
+aiohttp
+aiohttp_cors

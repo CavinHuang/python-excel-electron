@@ -1,0 +1,49 @@
+{
+  "name": "pyhone-excel-electron",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build-python": "cd backend && python -m PyInstaller ./api.spec --clean --distpath ./pydist",
+    "start": "concurrently \"npm run start:react\" \"wait-on http://localhost:5173 && npm run start:electron\"",
+    "start:react": "cd frontend && pnpm run dev",
+    "start:electron": "electron .",
+    "build": "cd frontend && pnpm run build",
+    "package": "electron-builder build --win --linux --mac -c.extraMetadata.main=electron/main.js"
+  },
+  "build": {
+    "appId": "com.my-website.my-app",
+    "productName": "MyApp",
+    "copyright": "Copyright © 2022 shaojia",
+    "mac": {
+      "category": "public.app-category.utilities"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "pydist/**/*",
+      "pydist/api/**/*"
+    ],
+    "directories": {
+      "buildResources": "assets",
+      "output": "dist_electron"
+    },
+    "asarUnpack": [
+      "**/pydist/api/**/*"
+    ]
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^32.0.1",
+    "electron-builder": "^24.13.3"
+  }
+}
