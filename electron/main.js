@@ -20,10 +20,14 @@ function createWindow() {
   mainWindow.on('closed', function () {
     mainWindow = null;
   });
+
+  mainWindow.webContents.openDevTools()
 }
 
 function startPythonBackend() {
-  pythonProcess = spawn('python', ['backend/excel_processor.py']);
+  pythonProcess = spawn('python', ['backend/api.py'], {
+    cwd: path.resolve(__dirname, '..'),
+  });
 
   pythonProcess.stdout.on('data', (data) => {
     console.log(`Python stdout: ${data}`);

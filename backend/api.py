@@ -1,3 +1,4 @@
+import json
 from aiohttp import web
 import aiohttp_cors
 import controller
@@ -5,7 +6,7 @@ import controller
 async def handle(request):
     name = request.match_info.get('name', "Anonymous")
     text = "Hello, " + name
-    return web.Response(text=text)
+    return web.Response(body=json.dumps({"text": text}), content_type='application/json')
 
 app = web.Application()
 app.add_routes([web.get('/', handle),

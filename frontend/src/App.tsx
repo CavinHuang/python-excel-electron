@@ -13,6 +13,13 @@ export default function App() {
     }
   };
 
+  const [res, setRes] = useState<string>("");
+  const handleClick = async () => {
+    const resFetch = await fetch("http://localhost:1134/hello");
+    const res = await resFetch.json();
+    setRes(res)
+  };
+
   const handleSubmit = async () => {
     if (!file) return;
 
@@ -22,9 +29,10 @@ export default function App() {
     try {
       const response = await fetch('http://localhost:5000/process_excel', {
         method: 'POST',
-        body: formData,
+        // body: formData,
       });
       const data = await response.json();
+      console.log('🚀 ~ handleSubmit ~ data:', data)
       setResult(data);
     } catch (error) {
       console.error('Error processing file:', error);
@@ -46,6 +54,8 @@ export default function App() {
               <pre>{JSON.stringify(result, null, 2)}</pre>
             </div>
           )}
+          <Button onClick={handleClick}>request py</Button>
+          <p>result:{res && res.text}</p>
         </CardContent>
       </Card>
     </div>

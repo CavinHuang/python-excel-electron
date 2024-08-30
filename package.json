@@ -2,7 +2,7 @@
   "name": "pyhone-excel-electron",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "electron/main.js",
   "scripts": {
     "build-python": "cd backend && python -m PyInstaller ./api.spec --clean --distpath ./pydist",
     "start": "concurrently \"npm run start:react\" \"wait-on http://localhost:5173 && npm run start:electron\"",
@@ -43,7 +43,9 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "concurrently": "^8.2.2",
     "electron": "^32.0.1",
-    "electron-builder": "^24.13.3"
+    "electron-builder": "^24.13.3",
+    "wait-on": "^8.0.0"
   }
 }
