@@ -45,7 +45,7 @@ const ExcelProcessor = () => {
   };
 
   return (
-    <div className="p-4 max-w-3xl mx-auto">
+    <div className="p-4 w-full">
       <Card>
         <CardHeader>
           <CardTitle>Excel文件处理工具</CardTitle>
