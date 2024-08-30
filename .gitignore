@@ -1,3 +1,7 @@
 node_modules
 dist
 venv
+dist_electron
+__pycache__
+build
+pydist

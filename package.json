@@ -4,11 +4,13 @@
   "description": "",
   "main": "electron/main.js",
   "scripts": {
-    "build-python": "cd backend && python -m PyInstaller ./api.spec --clean --distpath ./pydist",
-    "start": "concurrently \"npm run start:react\" \"wait-on http://localhost:5173 && npm run start:electron\"",
+    "start": "concurrently \"pnpm run start:react\" \"pnpm run start:electron\"",
     "start:react": "cd frontend && pnpm run dev",
-    "start:electron": "electron .",
-    "build": "cd frontend && pnpm run build",
+    "start:electron": "cross-env NODE_ENV=development electron .",
+    "build": "pnpm run build:python && pnpm run build:frontend && pnpm run build:electron",
+    "build:electron": "electron-builder build --win --linux --mac",
+    "build:frontend": "cd frontend && pnpm run build",
+    "build:python": "cd backend && python -m PyInstaller ./api.spec --clean --distpath ./pydist",
     "package": "electron-builder build --win --linux --mac -c.extraMetadata.main=electron/main.js"
   },
   "build": {
@@ -26,10 +28,9 @@
       "allowToChangeInstallationDirectory": true
     },
     "files": [
-      "dist/**/*",
+      "frontend/dist/**/*",
       "electron/**/*",
-      "pydist/**/*",
-      "pydist/api/**/*"
+      "backend/pydist/**/*"
     ],
     "directories": {
       "buildResources": "assets",
@@ -44,6 +45,7 @@
   "license": "ISC",
   "devDependencies": {
     "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
     "electron": "^32.0.1",
     "electron-builder": "^24.13.3",
     "wait-on": "^8.0.0"
