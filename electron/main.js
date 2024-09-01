@@ -19,6 +19,8 @@ function createWindow() {
     },
   });
 
+  mainWindow.setMenu(null);
+
   /**
    * 打开开发工具
    * 加载 index.html
