@@ -1,15 +1,23 @@
 # -*- mode: python ; coding: utf-8 -*-
 
+# Get path to Chromium executable
+import pyppeteer.chromium_downloader
+from PyInstaller.utils.hooks import collect_data_files, collect_submodules
+import os
+
+chromium_executable = pyppeteer.chromium_downloader.chromium_executable()
 
 block_cipher = None
+
+pyppeteer_files = collect_data_files('pyppeteer')
 
 
 a = Analysis(
     ['./api.py'],
-    pathex=[os.path.abspath('../venv/')],
-    binaries=[],
-    datas=[],
-    hiddenimports=[],
+    pathex=[os.path.abspath('../venv/'), os.path.dirname(chromium_executable)],
+    binaries=[(chromium_executable, 'chromium')],
+    datas=pyppeteer_files,
+    hiddenimports=collect_submodules('pyppeteer'),
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],

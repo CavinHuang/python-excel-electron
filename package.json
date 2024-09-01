@@ -8,7 +8,7 @@
     "start:react": "cd frontend && pnpm run dev",
     "start:electron": "cross-env NODE_ENV=development electron .",
     "build": "pnpm run build:python && pnpm run build:frontend && pnpm run build:electron",
-    "build:electron": "electron-builder build --win --linux --mac",
+    "build:electron": "electron-builder build --win",
     "build:frontend": "cd frontend && pnpm run build",
     "build:python": "cd backend && python -m PyInstaller ./api.spec --clean --distpath ./pydist",
     "package": "electron-builder build --win --linux --mac -c.extraMetadata.main=electron/main.js"
