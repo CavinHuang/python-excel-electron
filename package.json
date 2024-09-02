@@ -15,13 +15,23 @@
   },
   "build": {
     "appId": "com.my-website.my-app",
-    "productName": "MyApp",
-    "copyright": "Copyright © 2022 shaojia",
+    "productName": "Excel自动化处理工具",
+    "copyright": "Copyright © 2024 cavin",
     "mac": {
       "category": "public.app-category.utilities"
     },
     "win": {
-      "target": "nsis"
+      "icon": "public/excel.ico",
+      "artifactName": "Excel自动化处理工具_setup_${version}.exe",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "ia32",
+            "x64"
+          ]
+        }
+      ]
     },
     "nsis": {
       "oneClick": false,

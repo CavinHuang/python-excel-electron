@@ -68,6 +68,7 @@ const ExcelProcessor = () => {
   }
 
   const handleProcessFile = () => {
+    setLogs([])
     if (!file) {
       addLog("请先选择一个Excel文件");
       return;

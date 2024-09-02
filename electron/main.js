@@ -12,6 +12,7 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
+    icon: path.join(__dirname, '../public/excel.ico'),
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
