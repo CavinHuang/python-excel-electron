@@ -12,7 +12,8 @@
     "build:frontend": "cd frontend && pnpm run build",
     "build:python": "cd backend && python -m PyInstaller ./api.spec --clean --distpath ./pydist",
     "package": "electron-builder build --win --linux --mac -c.extraMetadata.main=electron/main.js",
-    "build:win32": "electron-builder --win --ia32"
+    "build:win32": "electron-builder --win --ia32",
+    "build:icon": "electron-icon-builder --input=./public/excel.png --output=public --flatten"
   },
   "build": {
     "appId": "com.my-website.my-app",
@@ -22,7 +23,6 @@
       "category": "public.app-category.utilities"
     },
     "win": {
-      "icon": "public/excel.ico",
       "artifactName": "Excel自动化处理工具_setup_${version}.exe",
       "target": [
         {
@@ -58,6 +58,7 @@
     "cross-env": "^7.0.3",
     "electron": "21.0.0",
     "electron-builder": "^24.13.3",
+    "electron-icon-builder": "^2.0.1",
     "wait-on": "^8.0.0"
   }
 }
