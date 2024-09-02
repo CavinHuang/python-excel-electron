@@ -10,7 +10,21 @@ import traceback
 # import logging
 from .fetch_main_Image import fetch_img, destory_browser
 from sse import logger
-from .scraper import get_product_detail
+
+template_config = {
+  "SEA_RAIL": {
+    "merage_column": 13,
+    "weight_column": 11,
+    "pic_column": 14,
+    "url_column": 17,
+  },
+  "AIR_TRANSPORT": {
+    "merage_column": 15,
+    "weight_column": 13,
+    "pic_column": 21,
+    "url_column": 20,
+  }
+}
 
 # 设置单元格的对齐方式，使内容溢出时隐藏
 alignment = Alignment(wrapText=True, shrinkToFit=False, wrap_text=True, vertical='center', horizontal='center')
@@ -83,7 +97,8 @@ def xlsx_sheet_add_img(src_img, m, n, ws, logger):
         # 记录日志，表示图片插入成功
         logger.info('图片插入成功')
 
-def process_excel(file_path, isPrice, isFetchImg):
+def process_excel(file_path, isPrice, isFetchImg, fileType):
+    config = template_config[fileType]
     try:
         # logger = logging.getLogger('log')
         # logger.setLevel(logging.DEBUG)
@@ -128,7 +143,7 @@ def process_excel(file_path, isPrice, isFetchImg):
             # print(row_idx)
             image_in_cell = has_image(row_idx)
 
-            cell = sheet.cell(row_idx, 17)
+            cell = sheet.cell(row_idx, config["url_column"])
             product_url = cell.value
             logger.info(f'商品链接:{product_url}')
             print(product_url)
@@ -137,11 +152,11 @@ def process_excel(file_path, isPrice, isFetchImg):
                 file_full_name, price = fetch_img(url=product_url, row_index=row_idx, logger=logger, image_in_cell=image_in_cell, isPrice=isPrice, isFetchImg=isFetchImg)
 
                 if image_in_cell is not True and isFetchImg is True:
-                  xlsx_sheet_add_img(file_full_name, cell.row, cell.column - 3, new_sheet, logger)
+                  xlsx_sheet_add_img(file_full_name, cell.row, config["pic_column"], new_sheet, logger)
                 if isPrice is True:
                   new_sheet.cell(row=row_idx, column=sheet.max_column, value=price)
             else:
-                logger.info(f'=======没有商品链接或者商品链接错误 或者 没有开启价格获取: {row_idx}')
+                logger.info(f'=======没有商品链接或者商品链接错误: {row_idx}')
 
             # 设置行高为20
             new_sheet.row_dimensions[row_idx].height = 20
@@ -167,7 +182,8 @@ def process_excel(file_path, isPrice, isFetchImg):
                     logger.info(f'第{row_idx}行数据需要拆分.')
                     # print(f'第{row_idx}行数据需要拆分.')
                     # 如果在合并单元格范围内，获取合并单元格的左上角单元格的值
-                    if col_idx == 13 :
+                    # if col_idx == 13 :
+                    if col_idx == config["merage_column"]:
                       if row_idx >= merged_range.max_row:
                           # 统计所有的数量
                           totalNum = 0
@@ -192,7 +208,8 @@ def process_excel(file_path, isPrice, isFetchImg):
                               _cell.alignment = alignment
                               _cell.font = font
                     # 箱子
-                    elif col_idx == 11:
+                    # elif col_idx == 11:
+                    elif col_idx == config["weight_column"]:
                       if row_idx >= merged_range.max_row:
                         for r_idx in range(merged_range.min_row, merged_range.max_row + 1):
                           _cell = new_sheet.cell(row=r_idx, column=col_idx, value=0)

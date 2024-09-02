@@ -10,9 +10,12 @@ from concurrent.futures import ThreadPoolExecutor
 import controller
 from sse import sse_handler, logger
 from excel.data_processor import process_excel
+from datetime import datetime
 
 current_path = os.path.dirname(os.path.abspath(__file__))
 tmp_file_path = os.path.join(current_path, 'tmpFiles')
+
+save_path = os.path.join(os.path.expanduser("~"), "python-excel-tool")
 
 # 确保上传目录存在
 os.makedirs(tmp_file_path, exist_ok=True)
@@ -30,7 +33,8 @@ async def add_task(request):
     print('add_task')
 
     try:
-        tmp_file_path = 'uploads'
+        # 上传文件路径 加上日期
+        tmp_file_path = os.path.join(save_path, 'uploads', datetime.now().strftime('%Y-%m-%d'))
         os.makedirs(tmp_file_path, exist_ok=True)
 
         reader = await request.multipart()
@@ -61,9 +65,10 @@ async def add_task(request):
 
         isPrice = response_data.get('isPrice', '0') == '1'
         isFetchImg = response_data.get('isFetchImg', '0') == '1'
+        fileType = response_data.get('fileType', 'SEA_RAIL')
         # 启动数据处理的工作线程
         def process_data():
-          process_excel(excel_files[0], isPrice, isFetchImg)
+          process_excel(excel_files[0], isPrice, isFetchImg, fileType)
           print("Excel processing tasks have been completed.")
 
         processing_thread = threading.Thread(target=process_data)

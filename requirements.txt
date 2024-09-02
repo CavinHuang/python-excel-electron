@@ -2,11 +2,10 @@ aiohttp_cors==0.7.0
 anti_useragent==1.0.10
 beautifulsoup4==4.12.3
 ddddocr==1.5.5
-openpyxl==3.0.10
 openpyxl==3.1.5
 pyppeteer==2.0.0
 pytest==7.4.0
-Quartz==0.0.1.dev0
-tqdm==4.65.0
+# Quartz==0.0.1.dev0
+# tqdm==4.65.0
 tqdm==4.66.5
 traitlets==5.14.3

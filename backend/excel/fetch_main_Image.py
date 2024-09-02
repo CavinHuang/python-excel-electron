@@ -264,7 +264,7 @@ def fetch_img(url, row_index, logger, image_in_cell, isPrice, isFetchImg):
     result = None
     image_success = False
 
-    url_status = check_url_is_valid(url, file_full_name, logger, image_in_cell)
+    url_status = check_url_is_valid(url, file_full_name, logger, image_in_cell, isFetchImg)
     if url_status == 2:
       image_success = True
       return file_full_name, None
@@ -300,10 +300,10 @@ async def destory_browser():
   cache_product_price = {}
 
 # 检查url是否有效, 如果是图片地址，返回False
-def check_url_is_valid(url, file_full_name, logger, image_in_cell):
+def check_url_is_valid(url, file_full_name, logger, image_in_cell, isFetchImg):
   if url.endswith('.png') or url.endswith('.jpg') or url.endswith('.jpeg') or url.endswith('.gif') or url.endswith('.bmp') or url.endswith('.webp'):
     logger.info('当前商品地址是图片地址')
-    if image_in_cell is not False:
+    if image_in_cell is not False or isFetchImg is True:
       # 获取图片二进制数据
       headers = {'Users-Agent': ua.random}
       img_data = requests.get(url=url, headers=headers).content

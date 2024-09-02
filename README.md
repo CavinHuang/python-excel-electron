@@ -1,6 +1,6 @@
 # NODE
 Vite uses node: import which is supported in v16.0.0+ and v14.18.0+. v15 does not support this.
-
+/Users/cavinhuang/Library/Application Support/pyppeteer/local-chromium/1181205
 ## START
 ``` bash
 # 根目录

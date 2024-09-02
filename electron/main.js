@@ -8,7 +8,6 @@ let pythonProcess;
 const NODE_ENV = process.env.NODE_ENV
 let pyProc = null
 
-
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 800,
@@ -27,6 +26,7 @@ function createWindow() {
    */
   if (NODE_ENV === "development") {
     mainWindow.loadURL('http://localhost:3000')
+    mainWindow.webContents.openDevTools()
   } else {
     mainWindow.loadURL(`file://${path.join(app.getAppPath(), '/frontend/dist/index.html')}`);
   }
@@ -35,7 +35,6 @@ function createWindow() {
     mainWindow = null;
   });
 
-  mainWindow.webContents.openDevTools()
 }
 
 function startDevPythonBackend() {
@@ -49,6 +48,10 @@ function startDevPythonBackend() {
 
   pythonProcess.stderr.on('data', (data) => {
     console.error(`Python stderr: ${data}`);
+  });
+
+  pythonProcess.on('close', (code) => {
+    console.log(`Python process exited with code ${code}`);
   });
 }
 
@@ -75,6 +78,10 @@ function startProPythonBackend() {
 
   pyProc.stderr?.on('data', (data) => {
     console.error(`Python stderr: ${data}`);
+  });
+
+  pyProc.on('close', (code) => {
+    console.log(`Python process exited with code ${code}`);
   });
 
   if (pyProc != null) {
@@ -104,6 +111,15 @@ app.on('activate', function () {
 });
 
 app.on('will-quit', () => {
+  if (pythonProcess) {
+    pythonProcess.kill();
+  }
+  if (pyProc) {
+    pyProc.kill();
+  }
+});
+
+app.on('before-quit', () => {
   if (pythonProcess) {
     pythonProcess.kill();
   }
