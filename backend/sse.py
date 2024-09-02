@@ -18,9 +18,12 @@ class QueueHandler(logging.Handler):
                 asyncio.set_event_loop(loop)
 
             if loop.is_running():
-                loop.call_soon_threadsafe(asyncio.create_task, log_queue.put(log_entry))
+                loop.call_soon_threadsafe(asyncio.create_task, self.send_log(log_entry))
             else:
-                loop.run_until_complete(log_queue.put(log_entry))
+                loop.run_until_complete(self.send_log(log_entry))
+
+    async def send_log(self, log_entry):
+        await log_queue.put(log_entry)
 
 # 创建一个日志记录器
 logger = logging.getLogger()

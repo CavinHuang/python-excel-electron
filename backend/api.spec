@@ -5,16 +5,21 @@ import pyppeteer.chromium_downloader
 from PyInstaller.utils.hooks import collect_data_files, collect_submodules
 import os
 
+# 获取 Chromium 可执行文件的路径
 chromium_executable = pyppeteer.chromium_downloader.chromium_executable()
 
+# 获取 Chromium 文件夹的路径（通常是可执行文件的父目录）
+chromium_folder = os.path.dirname(chromium_executable)
 block_cipher = None
 
+# 添加 Chromium 文件夹到 datas
 pyppeteer_files = collect_data_files('pyppeteer')
+pyppeteer_files.append((chromium_folder, 'pyppeteer/local-chromium'))
 
 
 a = Analysis(
     ['./api.py'],
-    pathex=[os.path.abspath('../venv/'), os.path.dirname(chromium_executable)],
+    pathex=[os.path.abspath('../venv/'), chromium_folder],
     binaries=[(chromium_executable, 'chromium')],
     datas=pyppeteer_files,
     hiddenimports=collect_submodules('pyppeteer'),

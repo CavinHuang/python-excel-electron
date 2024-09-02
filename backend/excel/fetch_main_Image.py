@@ -1,4 +1,5 @@
 import asyncio
+import sys
 from pyppeteer import launch
 from lxml import etree
 import requests
@@ -78,6 +79,7 @@ async def main(url, file_full_name, logger, image_in_cell, isPrice, isFetchImg):
         logger.info('从缓存中获取图片')
         print('从缓存中获取图片')
 
+
     fetch_price = None
     if isPrice is True:
       if url in cache_product_price:
@@ -95,17 +97,41 @@ async def main(url, file_full_name, logger, image_in_cell, isPrice, isFetchImg):
       return fetch_image_success, fetch_price
 
     url = f'{url}'
-    browser = await launch({
-      "headless": False,
-      "defaultViewport": {
-        "width": 1920,
-        "height": 1080
-      },
-      "args": ['--lang=en-US', '--no-sandbox', '--disable-setuid-sandbox'],
-      "handleSIGINT": False,
-      "handleSIGTERM": False,
-      "handleSIGHUP": False,
-    })
+    logger.info(f"开始获取图片和价格{url}")
+    logger.info(f"{getattr(sys, 'frozen', False)}")
+    print(f"{getattr(sys, 'frozen', False)}")
+    if getattr(sys, 'frozen', False):
+      chromium_path = os.path.join(sys._MEIPASS, 'pyppeteer', 'local-chromium')
+      # 在 Windows 上，可能需要进一步指定可执行文件路径
+      if sys.platform == 'win32':
+        chromium_path = os.path.join(chromium_path, 'chrome.exe')
+      logger.info(f"chromium_path: {chromium_path}")
+      print(f"chromium_path: {chromium_path}")
+      browser = await launch({
+        "headless": True,
+        "defaultViewport": {
+          "width": 1920,
+          "height": 1080
+        },
+        "args": ['--lang=en-US', '--no-sandbox', '--disable-setuid-sandbox'],
+        "handleSIGINT": False,
+        "handleSIGTERM": False,
+        "handleSIGHUP": False,
+        "executablePath": chromium_path,
+      })
+    else:
+      logger.info('==============else==============')
+      browser = await launch({
+        "headless": False,
+        "defaultViewport": {
+          "width": 1920,
+          "height": 1080
+        },
+        "args": ['--lang=en-US', '--no-sandbox', '--disable-setuid-sandbox'],
+        "handleSIGINT": False,
+        "handleSIGTERM": False,
+        "handleSIGHUP": False,
+      })
     page = await browser.newPage()
 
     desktop_ua = ua.random
@@ -271,12 +297,22 @@ def fetch_img(url, row_index, logger, image_in_cell, isPrice, isFetchImg):
 
     if url_status == 0:
       logger.info('当前商品地址不是amazon的商品页面')
-      print('当前商品地址不是amazon的商品页面：', url)
+      print('当前商品地址不是amazon的商品页面')
       return file_full_name, None
 
+    logger.info(f"开始获取图片和价格{isPrice}{isFetchImg}")
     _loop = asyncio.new_event_loop()
     asyncio.set_event_loop(_loop)
-    res = _loop.run_until_complete(main(url, file_full_name, logger, image_in_cell, isPrice, isFetchImg))
+    res = _loop.run_until_complete(
+      main(
+        url = url,
+        file_full_name = file_full_name,
+        logger = logger,
+        image_in_cell = image_in_cell,
+        isPrice = isPrice,
+        isFetchImg = isFetchImg
+      )
+    )
 
     if res is not None:
       image_success_status, price = res
