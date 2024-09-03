@@ -1,6 +1,6 @@
 {
   "name": "pyhone-excel-electron",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "electron/main.js",
   "scripts": {
@@ -16,7 +16,7 @@
     "build:icon": "electron-icon-builder --input=./public/excel.png --output=public --flatten"
   },
   "build": {
-    "appId": "com.my-website.my-app",
+    "appId": "com.pyhone-excel-electron-tool",
     "productName": "Excel自动化处理工具",
     "copyright": "Copyright © 2024 cavin",
     "mac": {
@@ -35,7 +35,10 @@
     },
     "nsis": {
       "oneClick": false,
-      "allowToChangeInstallationDirectory": true
+      "guid": "com.pyhone-excel-electron-tool",
+      "allowToChangeInstallationDirectory": true,
+      "include": "installer.nsh",
+      "allowElevation": true
     },
     "files": [
       "frontend/dist/**/*",
