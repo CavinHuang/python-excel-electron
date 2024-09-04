@@ -1,6 +1,6 @@
 {
   "name": "pyhone-excel-electron",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "",
   "main": "electron/main.js",
   "scripts": {
@@ -43,7 +43,8 @@
     "files": [
       "frontend/dist/**/*",
       "electron/**/*",
-      "backend/pydist/**/*"
+      "backend/pydist/**/*",
+      "installer.nsh"
     ],
     "directories": {
       "buildResources": "assets",

@@ -78,6 +78,8 @@ async def main(url, file_full_name, logger, image_in_cell, isPrice, isFetchImg):
         fetch_image_success = True
         logger.info('从缓存中获取图片')
         print('从缓存中获取图片')
+    else:
+      fetch_image_success = True
 
 
     fetch_price = None
